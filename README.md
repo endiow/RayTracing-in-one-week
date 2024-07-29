@@ -2,6 +2,8 @@
 
 使用vs2022+opencv实现RayTracing in one week的内容，使用opencv将ppm图片实时渲染。
 
+一个ppm文件查看网站：https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html
+
 最终效果图：
 
 ![final.png](./RayTracing_0/output/final.png)
