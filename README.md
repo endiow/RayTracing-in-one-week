@@ -1,6 +1,6 @@
-# RayTracing-in-one-week
+# RayTracing-in-one-weekend
 
-使用vs2022+opencv实现RayTracing in one week的内容，使用opencv将ppm图片实时渲染。
+使用vs2022+opencv实现RayTracing in one weekend的内容，使用opencv将ppm图片实时渲染。
 
 一个ppm文件查看网站：https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html
 
