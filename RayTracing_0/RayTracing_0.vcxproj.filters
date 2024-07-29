@@ -38,5 +38,11 @@
     <ClInclude Include="header\rtweekend.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="header\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

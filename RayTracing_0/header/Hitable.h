@@ -1,15 +1,17 @@
 #pragma once
 
 #include "Ray.h"
+#include "rtweekend.h"
 
 class Material;
+
 struct HitRecord   //命中结果
 {
 	double T;		//入射点解出来的T
 	Vec3 P;			//入射点
 	Vec3 Normal;	//法线
 	bool front_face;//判断法线方向
-	Material* MatPtr;
+	shared_ptr<Material> mat_ptr;	//材质
 
 	inline void set_face_normal(const Ray& r, const Vec3& outward_normal) 
 	{

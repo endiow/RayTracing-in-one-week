@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <limits>
 #include <memory>
+#include <functional>
+#include <random>
 
 
 // Usings
@@ -24,6 +26,23 @@ inline double degrees_to_radians(double degrees)
 
 inline double ffmin(double a, double b) { return a <= b ? a : b; }
 inline double ffmax(double a, double b) { return a >= b ? a : b; }
+
+//随机数
+inline double random_double(double min, double max)
+{
+    static std::uniform_real_distribution<double> distribution(min, max);   //生成[min,max]范围内的浮点数
+    static std::mt19937 generator;  //使用Mersenne Twister引擎，生成高质量的伪随机数。
+    static std::function<double()> rand_generator = std::bind(distribution, generator);
+    return rand_generator();
+}
+
+//限制x
+inline double clamp(double x, double min, double max) 
+{
+    if (x < min) return min;
+    if (x > max) return max;
+    return x;
+}
 
 // Common Headers
 

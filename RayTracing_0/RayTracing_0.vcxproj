@@ -142,8 +142,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\Camera.h" />
     <ClInclude Include="header\Hitable.h" />
     <ClInclude Include="header\HitableList.h" />
+    <ClInclude Include="header\Material.h" />
     <ClInclude Include="header\Ray.h" />
     <ClInclude Include="header\rtweekend.h" />
     <ClInclude Include="header\Sphere.h" />

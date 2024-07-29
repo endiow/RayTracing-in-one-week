@@ -7,8 +7,7 @@
 using std::shared_ptr;
 using std::make_shared;
 
-class HitableList :
-	public Hitable
+class HitableList : public Hitable
 {
 	std::vector<shared_ptr<Hitable>> objects;	//存放物体的列表
 public:

@@ -6,6 +6,8 @@ E[3]数组为向量的具体数值
 #include <iostream>
 #include <math.h>
 
+#include "rtweekend.h"
+
 class Vec3
 {
 	double E[3] = {0};
@@ -56,6 +58,21 @@ public:
 	//获得单位向量
 	inline void  MakeUnitVector();
 
+	//将颜色写入ppm
+	void write_color(std::ostream& out, int samples_per_pixel) const;
+
+	//所有光线都从内部的一个虚拟透镜发出, 经过lookfrom点, 这个透镜的半径越大, 图像就越模糊
+	inline static Vec3 random_in_unit_disk() 
+	{
+		while (true) 
+		{
+			auto p = Vec3(random_double(-1, 1), random_double(-1, 1), 0);
+			if (p.SquaredLength() >= 1) continue;
+			return p;
+		}
+	}
+
+
 	//以下为Vec3类的友元函数，在类内声明，类外定义，友元函数不属于任何类
 	friend inline Vec3 UnitVector(Vec3 V);
 	friend inline std::istream& operator>>(std::istream& IS, Vec3& T);
@@ -71,7 +88,76 @@ public:
 	friend inline Vec3 Cross(const Vec3& V1, const Vec3& V2);
 };
 
-//以下为类的非成员函数
+inline Vec3& Vec3::operator+=(const Vec3& V)
+{
+	E[0] += V.E[0];
+	E[1] += V.E[1];
+	E[2] += V.E[2];
+	return *this;
+}
+
+inline Vec3& Vec3::operator*=(const Vec3& V)
+{
+	E[0] *= V.E[0];
+	E[1] *= V.E[1];
+	E[2] *= V.E[2];
+	return *this;
+}
+inline Vec3& Vec3::operator-=(const Vec3& V)
+{
+	E[0] -= V.E[0];
+	E[1] -= V.E[1];
+	E[2] -= V.E[2];
+	return *this;
+}
+inline Vec3& Vec3::operator/=(const Vec3& V)
+{
+	E[0] /= V.E[0];
+	E[1] /= V.E[1];
+	E[2] /= V.E[2];
+	return *this;
+}
+inline Vec3& Vec3::operator*=(const double T)
+{
+	E[0] *= T;
+	E[1] *= T;
+	E[2] *= T;
+	return *this;
+}
+inline Vec3& Vec3::operator/=(const double T)
+{
+	double K = 1.0 / T;
+	E[0] *= K;
+	E[1] *= K;
+	E[2] *= K;
+	return *this;
+}
+
+//获取向量的单位向量
+inline void Vec3::MakeUnitVector()
+{
+	double k = 1.0 / sqrt(E[0] * E[0] + E[1] * E[1] + E[2] * E[2]);
+	E[0] *= k;
+	E[1] *= k;
+	E[2] *= k;
+}
+
+inline void Vec3::write_color(std::ostream& out, int samples_per_pixel) const
+{
+	// Divide the color total by the number of samples.
+	auto scale = 1.0 / samples_per_pixel;
+	auto r = scale * E[0];
+	auto g = scale * E[1];
+	auto b = scale * E[2];
+
+	// Write the translated [0,255] value of each color component.
+	out << static_cast<int>(256 * clamp(r, 0.0, 0.999)) << ' '
+		<< static_cast<int>(256 * clamp(g, 0.0, 0.999)) << ' '
+		<< static_cast<int>(256 * clamp(b, 0.0, 0.999)) << '\n';
+}
+
+
+//以下为类的友元函数
 
 //向量/模长 = 单位方向向量
 //这里可能有问题
@@ -92,15 +178,6 @@ inline std::ostream& operator<<(std::ostream& OS, const Vec3& T)
 {
 	OS << T.E[0] << " " << T.E[1] << " " << T.E[2];
 	return OS;
-}
-
-//获取向量的单位向量
-inline void Vec3::MakeUnitVector()
-{
-	double k = 1.0 / sqrt(E[0] * E[0] + E[1] * E[1] + E[2] * E[2]);
-	E[0] *= k;
-	E[1] *= k;
-	E[2] *= k;
 }
 
 inline Vec3 operator+(const Vec3& V1, const Vec3& V2)
@@ -155,50 +232,3 @@ inline Vec3 Cross(const Vec3& V1, const Vec3& V2)
 		(V1.E[0] * V2.E[1] - V1.E[1] * V2.E[0])
 	);
 }
-
-
-inline Vec3& Vec3::operator+=(const Vec3& V)
-{
-	E[0] += V.E[0];
-	E[1] += V.E[1];
-	E[2] += V.E[2];
-	return *this;
-}
-
-inline Vec3& Vec3::operator*=(const Vec3& V)
-{
-	E[0] *= V.E[0];
-	E[1] *= V.E[1];
-	E[2] *= V.E[2];
-	return *this;
-}
-inline Vec3& Vec3::operator-=(const Vec3& V)
-{
-	E[0] -= V.E[0];
-	E[1] -= V.E[1];
-	E[2] -= V.E[2];
-	return *this;
-}
-inline Vec3& Vec3::operator/=(const Vec3& V)
-{
-	E[0] /= V.E[0];
-	E[1] /= V.E[1];
-	E[2] /= V.E[2];
-	return *this;
-}
-inline Vec3& Vec3::operator*=(const double T)
-{
-	E[0] *= T;
-	E[1] *= T;
-	E[2] *= T;
-	return *this;
-}
-inline Vec3& Vec3::operator/=(const double T)
-{
-	double K = 1.0 / T;
-	E[0] *= K;
-	E[1] *= K;
-	E[2] *= K;
-	return *this;
-}
-
